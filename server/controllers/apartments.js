@@ -24,21 +24,7 @@ router.put('/:id/lease', bodyValidator, paramsValidator, (req, res) => {
   });
 });
 
-// vacant
-// router.get('/vacant', queryValidator, (req, res) => {
-//   Apartment.find({ renter: res.locals.renter })
-//           .exec((err, apartments) => {
-//             res.send({ apartments });
-//           });
-// });
-//
-// // occupied
-// router.get('/occupied', queryValidator, (req, res) => {
-//   Apartment.find({ renter: { $ne: res.locals.renter } })
-//           .exec((err, apartments) => {
-//             res.send({ apartments });
-//           });
-// });
+
 // index
 router.get('/', queryValidator, (req, res) => {
   // if (res.locals.renter === undefined) {
@@ -47,16 +33,17 @@ router.get('/', queryValidator, (req, res) => {
             .limit(res.locals.limit)
             .skip(res.locals.skip)
             .exec((err, apartments) => {
-              console.log('Inside query Validator', err, apartments);
+              console.log('Inside query Validator', res.locals.filter, res.locals.sumCollectedRent);
+              // if (res.locals.sumCollectedRent === 0) {
+              //   console.log('*******before sum function call', apartments);
+              //   Apartment.sumCollectedRent(apartments, (err1, sumRent) => {
+              //     console.log('Inside sum function ', sumRent, err1);
+              //     res.send({ apartments, sumRent });
+              //     console.log('SumCollectedRent');
+              //   });
+              // }
               res.send({ apartments });
             });
-  // } else {
-  //   Apartment.find({ renter: res.locals.renter })
-  //           .exec((err, apartments) => {
-  //             console.log('Inside find ###', apartments);
-  //             res.send({ apartments });
-  //           });
-  // }
 });
 
 // show
@@ -65,12 +52,3 @@ router.get('/:id', paramsValidator, (req, res) => {
     res.send({ apartment });
   });
 });
-
-// show vacant apartments
-// router.get('/vacant', queryValidator, (req, res) => {
-//   console.log('Inside vacant ');
-//   Apartment.find({}, (err, apartments) => {
-//     console.log('vacant %%%%%%', apartments, err);
-//     res.send({ apartments });
-//   });
-// });

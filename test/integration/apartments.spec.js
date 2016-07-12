@@ -58,6 +58,17 @@ describe('apartments', () => {
           done();
         });
     });
+    it('should return total of all collected rent of all apts', (done) => {
+      request(app)
+       .get('/apartments?sumCollectedRent=0&isVacant=false')
+       .end((err, rsp) => {
+         console.log('******sumCollected *******', rsp.body.apartments);
+         expect(err).to.be.null;
+         expect(rsp.status).to.equal(200);
+         expect(rsp.body.apartments).to.have.length(0);
+         done();
+       });
+    });
   });
 
   describe('get /apartments/:id', () => {

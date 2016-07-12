@@ -1,3 +1,4 @@
+/* eslint-disable func-names, no-param-reassign, consistent-return, no-underscore-dangle */
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
@@ -11,5 +12,10 @@ const schema = new Schema({
   renter: { type: mongoose.Schema.ObjectId, ref: 'Renter' },
   createdAt: { type: Date, default: Date.now },
 });
+
+schema.statics.sumCollectedRent = function sumCollectedRent(apartments, cb) {
+  const sumRent = apartments.reduce((acc, apt) => acc + apt.collectedRent, 0);
+  cb(null, sumRent);
+};
 
 module.exports = mongoose.model('Apartment', schema);

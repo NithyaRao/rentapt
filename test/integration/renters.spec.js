@@ -3,16 +3,6 @@
 const expect = require('chai').expect;
 const request = require('supertest');
 const app = require('../../dst/server');
-// const cp = require('child_process');
-// const Apartment = require('../../dst/models/apartment');
-
-// describe('bookmarks', () => {
-//   beforeEach((done) => {
-//     // run command script
-//     cp.execFile(`${__dirname}/../scripts/populate.sh`, { cwd: `${__dirname}/../scripts` }, () => {
-//       done();
-//     });
-//   });
 
 describe('get /renters', () => {
   it('should get all the renters', (done) => {
@@ -21,10 +11,25 @@ describe('get /renters', () => {
       .end((err, rsp) => {
         expect(err).to.be.null;
         expect(rsp.status).to.equal(200);
-        expect(rsp.body.renters).to.have.length(3);
+        expect(rsp.body.renters).to.have.length(4);
         done();
       });
   });
+});
+
+describe('get /renters/:id', () => {
+  it('should get one renter', (done) => {
+    request(app)
+      .get('/renters/5783fe521a8f209018c07c1f')
+      .end((err, rsp) => {
+        expect(err).to.be.null;
+        expect(rsp.status).to.equal(200);
+        expect(rsp.body.renter._id).to.equal('5783fe521a8f209018c07c1f');
+        done();
+      });
+  });
+});
+
 
 describe('post /renters', () => {
   it('should create an renter', (done) => {

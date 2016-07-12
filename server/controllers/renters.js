@@ -4,7 +4,7 @@ import express from 'express';
 import Renter from '../models/renter';
 import Apartment from '../models/apartment';
 import bodyValidator from '../validators/renters/body';
-// import queryValidator from '../validators/apartments/query';
+import queryValidator from '../validators/renters/query';
 import paramsValidator from '../validators/apartments/params';
 const router = module.exports = express.Router();
 
@@ -22,5 +22,24 @@ router.put('/:id/pay', bodyValidator, paramsValidator, (req, res) => {
         res.send({ renter, apartment });
       });
     });
+  });
+});
+// index
+router.get('/', queryValidator, (req, res) => {
+  // if (res.locals.renter === undefined) {
+  Renter.find(res.locals.filter)
+            .sort(res.locals.sort)
+            .limit(res.locals.limit)
+            .skip(res.locals.skip)
+            .exec((err, renters) => {
+              console.log('Inside query Validator', err, renters);
+              res.send({ renters });
+            });
+});
+
+// show
+router.get('/:id', paramsValidator, (req, res) => {
+  Renter.findById(req.params.id, (err, renter) => {
+    res.send({ renter });
   });
 });

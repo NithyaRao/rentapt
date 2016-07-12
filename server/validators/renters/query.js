@@ -5,15 +5,8 @@ import joi from 'joi';
 const schema = {
   page: joi.number().default(1),
   limit: joi.number().default(25),
-  filter: joi.object().keys({
-    sqft: joi.number(),
-    bedrooms: joi.number(),
-    floor: joi.number(),
-    renter: joi.object(),
-  }),
   sort: joi.object(),
-  isVacant: joi.string(),
-  sumCollectedRent: joi.number(),
+  filter: joi.object().keys({}),
 };
 
 module.exports = (req, res, next) => {
@@ -23,12 +16,6 @@ module.exports = (req, res, next) => {
     res.status(400).send({ messages: result.error.details.map(d => d.message) });
   } else {
     res.locals = result.value;
-    if (res.locals.isVacant) {
-      if (!res.locals.filter) {
-        res.locals.filter = {};
-      }
-      res.locals.filter.renter = (res.locals.isVacant === 'true') ? { $eq: null } : { $ne: null };
-    }
     res.locals.skip = (res.locals.page - 1) * res.locals.limit;
     next();
   }
